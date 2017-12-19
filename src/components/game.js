@@ -5,15 +5,19 @@ import GuessSection from './guess-section';
 import StatusSection from './status-section';
 import InfoSection from './info-section';
 
+import {connect} from 'react-redux';
+import {addGuess} from '../actions';
+
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       guesses: [],
-      feedback: 'Make your guesssssss!',
+      feedback: 'Make your guess!',
       auralStatus: '',
       correctAnswer: Math.round(Math.random() * 100) + 1
     };
+    console.log(props.correctAnswer);
   }
 
   restartGame() {
@@ -26,37 +30,15 @@ export default class Game extends React.Component {
   }
 
   makeGuess(guess) {
+    this.props.dispatch(addGuess(guess));
+
+
+    console.log(guess);
     guess = parseInt(guess, 10);
     if (isNaN(guess)) {
       this.setState({ feedback: 'Please enter a valid number' });
       return;
     }
-
-    const difference = Math.abs(guess - this.state.correctAnswer);
-
-    let feedback;
-    if (difference >= 50) {
-      feedback = 'You\'re Ice Cold...';
-    } else if (difference >= 30) {
-      feedback = 'You\'re Cold...';
-    } else if (difference >= 10) {
-      feedback = 'You\'re Warm.';
-    } else if (difference >= 1) {
-      feedback = 'You\'re Hot!';
-    } else {
-      feedback = 'You got it!';
-    }
-
-    this.setState({
-      feedback,
-      guesses: [...this.state.guesses, guess]
-    });
-
-    // We typically wouldn't touch the DOM directly like this in React
-    // but this is the best way to update the title of the page,
-    // which is good for giving screen-reader users
-    // instant information about the app.
-    document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
   }
 
   generateAuralUpdate() {
@@ -71,8 +53,6 @@ export default class Game extends React.Component {
     if (guesses.length > 0) {
       auralStatus += ` ${pluralize ? 'In order of most- to least-recent, they are' : 'It was'}: ${guesses.reverse().join(', ')}`;
     }
-
-
     this.setState({ auralStatus });
   }
 
@@ -98,9 +78,17 @@ export default class Game extends React.Component {
           <InfoSection />
         </main>
       </div>
-    );
+      );
+    }
   }
-}
+
+  
+// const mapStateToProps = (state, props) => {
+//   return {
+//     correctAnswer: Math.round(Math.random() * 100) + 1
+//   }
+// }
 
 
-//export default connect(mapStateToProps)(Game);
+
+// export default connect(mapStateToProps)(Game);
