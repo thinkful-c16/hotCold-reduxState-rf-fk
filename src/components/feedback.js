@@ -1,14 +1,17 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 import './feedback.css';
 
-export default function Feedback(props) {
+export class Feedback extends React.Component {
+
+  render(){
   /** 
    * Below, we'll use the guessCount to generate a key so that React treats the feedback message 
    * as a DOM change, even when a guess does not change the feedback text.
    * This is necessary for consistent aural feedback via aria-live.
   */
-  const key = props.guessCount;
+  const key = this.props.guessCount;
 
   let guessAgain;
   if (key !== 0) {
@@ -22,7 +25,17 @@ export default function Feedback(props) {
       aria-live="assertive"
       aria-atomic="true"
     >
-      {props.feedback} {guessAgain}
+      {this.props.feedback} {guessAgain}
     </h2>
-  );
+    );
+  }
 }
+
+const mapStateToProps = (state, props) => {
+   return {
+     feedback: state.feedback
+   }
+}
+
+
+export default connect(mapStateToProps)(Feedback);

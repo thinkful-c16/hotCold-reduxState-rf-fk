@@ -10,7 +10,7 @@ export default class Game extends React.Component {
     super(props);
     this.state = {
       guesses: [],
-      feedback: 'Make your guess!',
+      feedback: 'Make your guesssssss!',
       auralStatus: '',
       correctAnswer: Math.round(Math.random() * 100) + 1
     };
@@ -101,3 +101,6 @@ export default class Game extends React.Component {
     );
   }
 }
+
+
+//export default connect(mapStateToProps)(Game);
