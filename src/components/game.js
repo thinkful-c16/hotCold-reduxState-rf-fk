@@ -1,21 +1,20 @@
-import React from 'react';
+import React from "react";
 
-import Header from './header';
-import GuessSection from './guess-section';
-import StatusSection from './status-section';
-import InfoSection from './info-section';
+import Header from "./header";
+import GuessSection from "./guess-section";
+import StatusSection from "./status-section";
+import InfoSection from "./info-section";
 
-import {connect} from 'react-redux';
-import {addGuess, reset} from '../actions';
+import { connect } from "react-redux";
+import { addGuess, reset } from "../actions";
 
-
- class Game extends React.Component {
+class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       guesses: [],
-      feedback: 'Make your guess!',
-      auralStatus: '',
+      feedback: "Make your guess!",
+      auralStatus: "",
       correctAnswer: Math.round(Math.random() * 100) + 1
     };
   }
@@ -32,10 +31,10 @@ import {addGuess, reset} from '../actions';
   }
 
   makeGuess(guess) {
-    if (!isNaN(guess)){
+    if (!isNaN(guess)) {
       this.props.dispatch(addGuess(guess));
     }
- }
+  }
 
   generateAuralUpdate() {
     const { guesses, feedback } = this.state;
@@ -44,10 +43,14 @@ import {addGuess, reset} from '../actions';
     // pluralize the nouns in this aural update.
     const pluralize = guesses.length !== 1;
 
-    let  auralStatus = `Here's the status of the game right now: ${feedback} You've made ${guesses.length} ${pluralize ? 'guesses' : 'guess'}.`;
+    let auralStatus = `Here's the status of the game right now: ${feedback} You've made ${
+      guesses.length
+    } ${pluralize ? "guesses" : "guess"}.`;
 
     if (guesses.length > 0) {
-      auralStatus += ` ${pluralize ? 'In order of most- to least-recent, they are' : 'It was'}: ${guesses.reverse().join(', ')}`;
+      auralStatus += ` ${
+        pluralize ? "In order of most- to least-recent, they are" : "It was"
+      }: ${guesses.reverse().join(", ")}`;
     }
     this.setState({ auralStatus });
   }
@@ -68,23 +71,19 @@ import {addGuess, reset} from '../actions';
             guessCount={guessCount}
             onMakeGuess={guess => this.makeGuess(guess)}
           />
-          <StatusSection guesses={guesses} 
-            auralStatus={auralStatus}
-          />
+          <StatusSection guesses={guesses} auralStatus={auralStatus} />
           <InfoSection />
         </main>
       </div>
-      );
-    }
+    );
   }
+}
 //export default connect()(Game)
-  
+
 const mapStateToProps = (state, props) => {
   return {
     guesses: state.guesses
-  }
-}
-
-
+  };
+};
 
 export default connect(mapStateToProps)(Game);

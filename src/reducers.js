@@ -30,7 +30,6 @@ export const reducer = (state = initialState, action) => {
     } else {
       feedback = "You got it!";
     }
-
     return Object.assign({}, state, {
       guesses: [...state.guesses, action.number],
       feedback
