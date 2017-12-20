@@ -6,9 +6,10 @@ import StatusSection from './status-section';
 import InfoSection from './info-section';
 
 import {connect} from 'react-redux';
-import {addGuess} from '../actions';
+import {addGuess, reset} from '../actions';
 
-export default class Game extends React.Component {
+
+ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,29 +18,24 @@ export default class Game extends React.Component {
       auralStatus: '',
       correctAnswer: Math.round(Math.random() * 100) + 1
     };
-    console.log(props.correctAnswer);
   }
 
   restartGame() {
-    this.setState({
-      guesses: [],
-      feedback: 'Make your guess!',
-      auralStatus: '',
-      correctAnswer: Math.floor(Math.random() * 100) + 1
-    });
+    this.props.dispatch(reset());
+
+    // this.setState({
+    //   guesses: [],
+    //   feedback: 'Make your guess!',
+    //   auralStatus: '',
+    //   correctAnswer: Math.floor(Math.random() * 100) + 1
+    // });
   }
 
   makeGuess(guess) {
-    this.props.dispatch(addGuess(guess));
-
-
-    console.log(guess);
-    guess = parseInt(guess, 10);
-    if (isNaN(guess)) {
-      this.setState({ feedback: 'Please enter a valid number' });
-      return;
+    if (!isNaN(guess)){
+      this.props.dispatch(addGuess(guess));
     }
-  }
+ }
 
   generateAuralUpdate() {
     const { guesses, feedback } = this.state;
@@ -81,14 +77,14 @@ export default class Game extends React.Component {
       );
     }
   }
-
+//export default connect()(Game)
   
-// const mapStateToProps = (state, props) => {
-//   return {
-//     correctAnswer: Math.round(Math.random() * 100) + 1
-//   }
-// }
+const mapStateToProps = (state, props) => {
+  return {
+    guesses: state.guesses
+  }
+}
 
 
 
-// export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps)(Game);
